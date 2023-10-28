@@ -10,6 +10,7 @@ body {
     display :flex;
     flex-direction: column;
     align-items: center;
+    gap : 32px
 }
 
 .menu {
@@ -27,4 +28,16 @@ body {
 .board-cell {
     border: 1px solid #0a0a0a;
     height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu {
+    padding: 16px;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-around;
 }
