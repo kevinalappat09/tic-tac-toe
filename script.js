@@ -1,4 +1,18 @@
+let activePlayer = 0;
+const resetButton = document.querySelector('.reset-btn');
+
 // Gameboard - updating and getting element on the board.
+const createBoard = ( function() {
+    const boardDiv = document.querySelector('.board');
+
+    for(let i=0;i<9;i++) {
+        const new_grid_square = document.createElement('div');
+        new_grid_square.setAttribute('class','board-cell');
+        new_grid_square.setAttribute('data-id',i);
+        boardDiv.appendChild(new_grid_square);
+    }
+}())
+
 const gameboard = (function() {
     const gameboardElement = [['','',''],
                               ['','',''],
@@ -8,8 +22,15 @@ const gameboard = (function() {
     const updateElement = (i,j,symbol) => gameboardElement[i][j] = symbol;
     const getElement = (i,j) => gameboardElement[i][j];
     const debugPrintBoard = () => console.log(gameboardElement);
+    const resetBoard = () => {
+        for(let i=0;i<3;i++) {
+            for(let j=0;j<3;j++) {
+                gameboardElement[i][j] = '';
+            }
+        }
+    }
 
-    return {updateElement, debugPrintBoard, getElement};
+    return {updateElement, debugPrintBoard, getElement, resetBoard};
 }) ();
 
 // Display features related to the board.
@@ -33,12 +54,12 @@ const boardDisplay = (function() {
         }
     }
 
-    
     const debugPrintCell = () => console.log(cells_arr);
 
     return {debugPrintCell, updateDisplay};
 }) ();
 
+// Create player factory function
 function createPlayer(symbol) {
     let playerScore = 0;
     let playerName;
@@ -53,11 +74,13 @@ function createPlayer(symbol) {
     return {getScore, increaseScore, getName, setName, getSymbol};
 }
 
+// The player objects
 const player1 = createPlayer("X");
 player1.setName("Kevin");
 const player2 = createPlayer("O");
 player2.setName("Nikita");
 
+// Player display object
 const playerDisplay = (function() {
     const player1Name = document.querySelector('#player1-name');
     const player1Symbol = document.querySelector('#player1-symbol');
@@ -75,11 +98,149 @@ const playerDisplay = (function() {
     player2Symbol.innerHTML =player2.getSymbol();
     player2Score.innerHTML =player2.getScore();
 
+    const player1updateNameUI = () => {
+        player1Name.innerHTML = player1.getName();
+    }
 
+    const player1updateScoreUI = () => {
+        player1Score.innerHTML = player1.getScore();
+    }
+
+    const player2updateNameUI = () => {
+        player2Name.innerHTML = player2.getName();
+    }
+
+    const player2updateScoreUI = () => {
+        player2Score.innerHTML = player2.getScore();
+    }
+
+    return {player1updateNameUI, player2updateNameUI, player1updateScoreUI, player2updateScoreUI};
 }) ();
 
-const gameObject = (function() {
+function gamePause() {
+    const message = document.querySelector('.messages');
+    const gridCells = document.querySelectorAll('.board-cell');
+    gcArray = Array.from(gridCells);
+    for(let i=0;i<gcArray.length;i++) {
+        gcArray[i].removeEventListener('click',changeElement);
+    }
 
-}) ();
+    console.log('reset the boad to try again');
+    message.innerHTML = 'Reset the board to try again';
+}
 
-boardDisplay.updateDisplay();
+function checkWin () {
+    for(let i=0;i<3;i++) {
+        if(gameboard.getElement(i,0) == 'X' && gameboard.getElement(i,1) == 'X' && gameboard.getElement(i,2) == 'X') {
+            console.log(`X won, row ${i}`);
+            gamePause();
+            player1.increaseScore();
+            return;
+        }
+        else if(gameboard.getElement(i,0) == 'O' && gameboard.getElement(i,1) == 'O' && gameboard.getElement(i,2) == 'O') {
+            console.log(`Y won, row ${i}`);
+            gamePause();
+            player2.increaseScore();
+            return;
+        }
+    }
+
+    for(let i=0;i<3;i++) {
+        if(gameboard.getElement(0,i) == 'X' && gameboard.getElement(1,i) == 'X' && gameboard.getElement(2,i) == 'X') {
+            console.log(`X won, row 1 ${i}`);
+            gamePause();
+            player1.increaseScore();
+            return;
+        }
+        else if(gameboard.getElement(0,i) == 'O' && gameboard.getElement(1,i) == 'O' && gameboard.getElement(2,i) == 'O') {
+            console.log(`Y won, row ${i}`);
+            gamePause();
+            player2.increaseScore();
+            return;
+        }
+    }
+
+    if(gameboard.getElement(0,0)=='X' && gameboard.getElement(1,1)=='X' && gameboard.getElement(2,2)=='X') {
+        console.log(`X won, diagonal`);
+        player1.increaseScore();
+        gamePause();
+        return;
+    } else if (gameboard.getElement(0,0)=='O' && gameboard.getElement(1,1)=='O' && gameboard.getElement(2,2)=='O'){
+        console.log(`Y won, diagonal`);
+        gamePause();
+        player2.increaseScore();
+        return;
+    }
+
+    if(gameboard.getElement(0,2)=='X' && gameboard.getElement(1,1)=='X' && gameboard.getElement(2,0)=='X') {
+        console.log(`X won, diagonal`);
+        player1.increaseScore();
+        gamePause();
+        return;
+    } else if (gameboard.getElement(0,2)=='O' && gameboard.getElement(1,1)=='O' && gameboard.getElement(2,0)=='O'){
+        console.log(`Y won, diagonal`);
+        gamePause();
+        player2.increaseScore();
+        return;
+    }
+
+    let count = 0;
+    for(let i=0;i<3;i++) {
+        for(let j=0;j<3;j++) {
+            if(gameboard.getElement(i,j)=='') {
+                count++;
+            }
+        }
+    }
+    if(count==0) {
+        console.log(`Tie`);
+        gamePause();
+        return;
+    }
+    
+    
+}
+
+function changeElement(event) {
+    const gridID = event.target.getAttribute('data-id');
+    let x = Math.floor(gridID/3);
+    let y = gridID % 3;
+    console.log(`${x},${y}`);
+    if(gameboard.getElement(x,y)!='') {
+        console.log("Already occupied");
+        return;
+    }
+    if(activePlayer==0) {
+        gameboard.updateElement(x,y,player1.getSymbol());
+        activePlayer = 1;
+    } else {
+        gameboard.updateElement(x,y,player2.getSymbol());
+        activePlayer = 0;
+    }
+    gameboard.debugPrintBoard();
+    boardDisplay.updateDisplay();
+    checkWin();
+    playerDisplay.player1updateScoreUI();
+    playerDisplay.player2updateScoreUI();
+}
+
+function game_init() {
+    console.log('meow');
+    activePlayer=0;
+    gameboard.resetBoard();
+    boardDisplay.updateDisplay();
+    const gridCells = document.querySelectorAll('.board-cell');
+    gcArray = Array.from(gridCells);
+    for(let i=0;i<gcArray.length;i++) {
+        gcArray[i].addEventListener('click',changeElement);
+    }
+
+    playerDisplay.player1updateScoreUI();
+    playerDisplay.player2updateScoreUI();
+}
+
+
+resetButton.addEventListener('click', game_init);
+
+
+game_init();

@@ -18,11 +18,11 @@ body {
 }
 
 .board {
-    width: 40%;
+    width: 30%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    height: 80vh;
+    height: 60vh;
 }
 
 .board-cell {
