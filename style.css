@@ -23,15 +23,24 @@ body {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     height: 60vh;
+    background-color: #f9a8d4;
+    padding: 32px;
+    border-radius: 24px;
 }
 
 .board-cell {
-    border: 1px solid #0a0a0a;
+    border: 1px solid #404040;
     height: 100%;
 
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: 300ms;
+
+}
+
+.board-cell:hover {
+    background-color: #fce7f3;
 }
 
 .menu {
@@ -40,4 +49,40 @@ body {
 
     display: flex;
     justify-content: space-around;
+}
+
+#top-left {
+    border-top: none;
+    border-left: none;
+}
+
+#top-center {
+    border-top: none;
+}
+
+#top-right {
+    border-top: none;
+    border-right: none;
+}
+
+#center-left { 
+    border-left: none;
+}
+
+#center-right {
+    border-right: none;
+}
+
+#bottom-left {
+    border-left: none;
+    border-bottom: none;
+}
+
+#bottom-center {
+    border-bottom: none;
+}
+
+#bottom-right {
+    border-right: none;
+    border-bottom: none;
 }

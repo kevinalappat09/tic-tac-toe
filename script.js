@@ -9,6 +9,25 @@ const createBoard = ( function() {
         const new_grid_square = document.createElement('div');
         new_grid_square.setAttribute('class','board-cell');
         new_grid_square.setAttribute('data-id',i);
+        if(i==0) {
+            new_grid_square.setAttribute('id','top-left');
+        } else if(i==1) {
+            new_grid_square.setAttribute('id','top-center');
+        } else if(i==2) {
+            new_grid_square.setAttribute('id','top-right');
+        } else if(i==3) {
+            new_grid_square.setAttribute('id','center-left');
+        } else if(i==4) {
+            new_grid_square.setAttribute('id','center-center');
+        } else if(i==5) {
+            new_grid_square.setAttribute('id','center-right');
+        } else if(i==6) {
+            new_grid_square.setAttribute('id','bottom-left');
+        } else if(i==7) {
+            new_grid_square.setAttribute('id','bottom-center');
+        } else if(i==8) {
+            new_grid_square.setAttribute('id','bottom-right');
+        } 
         boardDiv.appendChild(new_grid_square);
     }
 }())
