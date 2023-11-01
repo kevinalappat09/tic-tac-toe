@@ -1,5 +1,5 @@
 :root {
-
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 body {
@@ -14,7 +14,53 @@ body {
 }
 
 .menu {
-    color: red;
+    background-color: #fefce8;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    grid-template-rows: 1fr;
+}
+
+.center-console {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.reset-btn {
+    background-color: #f87171;
+    outline: none;
+    border: none;
+    padding: 8px;
+    border-radius: 16px;
+}
+
+.game-title {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.p-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+}
+
+.player-basic {
+    font-size: 24px;
+
+}
+
+.player-score {
+    font-size: 72px;
+    font-weight: 700;
+}
+
+.change-name {
+    font-size: 10px;
+    font-weight: lighter;
 }
 
 .board {
@@ -85,4 +131,10 @@ body {
 #bottom-right {
     border-right: none;
     border-bottom: none;
+}
+
+.messages {
+    text-align: center;
+    font-weight: 700;
+    color: #f87171;
 }

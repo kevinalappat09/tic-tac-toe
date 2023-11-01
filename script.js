@@ -1,5 +1,23 @@
 let activePlayer = 0;
 const resetButton = document.querySelector('.reset-btn');
+const message = document.querySelector('.messages');
+const changeNameButton = document.querySelectorAll('.change-name');
+    changeNameButtonArr = Array.from(changeNameButton);
+    for(let i=0;i<changeNameButtonArr.length;i++) {
+        changeNameButtonArr[i].addEventListener('click',changeName);
+    }
+
+function changeName (event) {
+    let new_name = prompt("Enter new name");
+    if(event.target.getAttribute('p-id')==1) {
+        player1.setName(new_name);
+        playerDisplay.player1updateNameUI();
+    } else if(event.target.getAttribute('p-id')==2) {
+        player2.setName(new_name);
+        playerDisplay.player2updateNameUI();
+    }
+}
+
 
 // Gameboard - updating and getting element on the board.
 const createBoard = ( function() {
@@ -137,7 +155,6 @@ const playerDisplay = (function() {
 }) ();
 
 function gamePause() {
-    const message = document.querySelector('.messages');
     const gridCells = document.querySelectorAll('.board-cell');
     gcArray = Array.from(gridCells);
     for(let i=0;i<gcArray.length;i++) {
@@ -154,12 +171,14 @@ function checkWin () {
             console.log(`X won, row ${i}`);
             gamePause();
             player1.increaseScore();
+            message.innerHTML = `Player 1 wins<br>Reset the board to play again`;
             return;
         }
         else if(gameboard.getElement(i,0) == 'O' && gameboard.getElement(i,1) == 'O' && gameboard.getElement(i,2) == 'O') {
             console.log(`Y won, row ${i}`);
             gamePause();
             player2.increaseScore();
+            message.innerHTML = `Player 2 wins<br>Reset the board to play again`;
             return;
         }
     }
@@ -169,12 +188,14 @@ function checkWin () {
             console.log(`X won, row 1 ${i}`);
             gamePause();
             player1.increaseScore();
+            message.innerHTML = `Player 1 wins<br>Reset the board to play again`;
             return;
         }
         else if(gameboard.getElement(0,i) == 'O' && gameboard.getElement(1,i) == 'O' && gameboard.getElement(2,i) == 'O') {
             console.log(`Y won, row ${i}`);
             gamePause();
             player2.increaseScore();
+            message.innerHTML = `Player 2 wins<br>Reset the board to play again`;
             return;
         }
     }
@@ -182,24 +203,28 @@ function checkWin () {
     if(gameboard.getElement(0,0)=='X' && gameboard.getElement(1,1)=='X' && gameboard.getElement(2,2)=='X') {
         console.log(`X won, diagonal`);
         player1.increaseScore();
+        message.innerHTML = `Player 1 wins<br>Reset the board to play again`;
         gamePause();
         return;
     } else if (gameboard.getElement(0,0)=='O' && gameboard.getElement(1,1)=='O' && gameboard.getElement(2,2)=='O'){
         console.log(`Y won, diagonal`);
         gamePause();
         player2.increaseScore();
+        message.innerHTML = `Player 2 wins<br>Reset the board to play again`;
         return;
     }
 
     if(gameboard.getElement(0,2)=='X' && gameboard.getElement(1,1)=='X' && gameboard.getElement(2,0)=='X') {
         console.log(`X won, diagonal`);
         player1.increaseScore();
+        message.innerHTML = `Player 1 wins<br>Reset the board to play again`;
         gamePause();
         return;
     } else if (gameboard.getElement(0,2)=='O' && gameboard.getElement(1,1)=='O' && gameboard.getElement(2,0)=='O'){
         console.log(`Y won, diagonal`);
         gamePause();
         player2.increaseScore();
+        message.innerHTML = `Player 2 wins<br>Reset the board to play again`;
         return;
     }
 
@@ -226,7 +251,7 @@ function changeElement(event) {
     let y = gridID % 3;
     console.log(`${x},${y}`);
     if(gameboard.getElement(x,y)!='') {
-        console.log("Already occupied");
+        message.innerHTML = "Already occupied";
         return;
     }
     if(activePlayer==0) {
@@ -256,6 +281,7 @@ function game_init() {
 
     playerDisplay.player1updateScoreUI();
     playerDisplay.player2updateScoreUI();
+    message.innerHTML = "";
 }
 
 
